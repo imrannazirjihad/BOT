@@ -2,14 +2,34 @@ import os
 import requests
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
-
 # Access the bot token from the environment variable
 TOKEN = os.getenv("TELEGRAM_BOT_API_TOKEN")
 ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY")
+
 if not TOKEN:
     raise ValueError("Bot token is missing or invalid")
 if not ETHERSCAN_API_KEY:
     raise ValueError("Etherscan API key is missing or invalid")
+
+
+def main_methode():
+    # Create the Application using the bot's token
+    application = Application.builder().token(TOKEN).build()
+
+    # Response For '/start' command
+    application.add_handler(CommandHandler("start", start_methode))
+
+    # Response For '/gas' command
+    application.add_handler(CommandHandler("gas", get_gas_data))
+
+    # Add a message handler to respond to any message
+    application.add_handler(MessageHandler(None, handle_any_message))
+
+    # Start polling and keep the bot running
+    application.run_polling()
+
+if __name__ == '__main__':
+    main_methode()
 
 async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     is_sticker = bool(update.message.sticker)
@@ -46,24 +66,3 @@ async def get_gas_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         await update.message.reply_text(reply_message)
     else:
         await update.message.reply_text("Failed to fetch gas data. Please try again later.")
-
-
-
-def main_methode():
-    # Create the Application using the bot's token
-    application = Application.builder().token(TOKEN).build()
-
-    # Response For '/start' command
-    application.add_handler(CommandHandler("start", start_methode))
-
-    # Response For '/gas' command
-    application.add_handler(CommandHandler("gas", get_gas_data))
-
-    # Add a message handler to respond to any message
-    application.add_handler(MessageHandler(None, handle_any_message))
-
-    # Start polling and keep the bot running
-    application.run_polling()
-
-if __name__ == '__main__':
-    main_methode()
