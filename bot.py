@@ -13,7 +13,7 @@ async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
     user = update.message.from_user
     username = user.username if user.username else "No username"
 
-    message_type = update.message.content_type  # Get the type of message (text, photo, sticker, etc.)
+    message_type = update.message.chat_id  # Get the type of message (text, photo, sticker, etc.)
 
     # Create a detailed reply message with all the data
     reply_message = f"Message Details:\n"
@@ -31,8 +31,7 @@ def main():
     # Create the Application using the bot's token
     application = Application.builder().token(TOKEN).build()
 
-
-    # noinspection PyTypeChecker
+    # Add a command handler to respond to '/start' command
     application.add_handler(CommandHandler("start", start_methode))
 
     # Add a message handler to respond to any message
@@ -43,7 +42,7 @@ def main():
 
 
 
-async def start_methode(update: Update) -> None:
+async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a welcome message when the bot is started."""
     await update.message.reply_text(
         "Hello! I'm your bot. Send any message and I'll reply with the details."
