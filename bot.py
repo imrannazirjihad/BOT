@@ -1,6 +1,5 @@
 import os
 
-import requests
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
 
@@ -24,18 +23,11 @@ async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
         reply_message += f"Name: {set_name}\n\n"
         await update.message.reply_text(reply_message)
 
-async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    is_sticker = bool(update.message.sticker.is_video)
-    if is_sticker:
-        is_video = bool(update.message.sticker)
-        is_animated = bool(update.message.sticker.is_animated)
-        set_name = update.message.sticker.set_name
-        reply_message = f"Message Details:\n\n"
-        reply_message += f"isVideo: {is_video}\n\n"
-        reply_message += f"isSticker: {is_sticker}\n\n"
-        reply_message += f"isAnimated: {is_animated}\n\n"
-        reply_message += f"Name: {set_name}\n\n"
-        await update.message.reply_text(reply_message)
+async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Send a welcome message when the bot is started."""
+    await update.message.reply_text(
+        "Hello! I'm your bot. Send any message and I'll reply with the details."
+    )
 
 
 async def get_gas_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -54,11 +46,7 @@ async def get_gas_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     else:
         await update.message.reply_text("Failed to fetch gas data. Please try again later.")
 
-async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a welcome message when the bot is started."""
-    await update.message.reply_text(
-        "Hello! I'm your bot. Send any message and I'll reply with the details."
-    )
+
 
 def main_methode():
     # Create the Application using the bot's token
@@ -67,6 +55,7 @@ def main_methode():
     # Response For '/start' command
     application.add_handler(CommandHandler("start", start_methode))
 
+    # Response For '/gas' command
     application.add_handler(CommandHandler("gas", get_gas_data))
 
     # Add a message handler to respond to any message
