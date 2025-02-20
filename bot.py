@@ -1,49 +1,22 @@
-import os
 from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
-
-# Access the bot token from the environment variable
-TOKEN = os.getenv("TELEGRAM_BOT_API_TOKEN")
-
-if not TOKEN:
-    raise ValueError("Bot token is missing or invalid")
-
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a welcome message when the bot is started."""
-    await update.message.reply_text("Hello! I'm your bot. Send any message and I'll reply with the details.")
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Handle any message and reply with all data from the update object."""
+    """Handle any incoming message."""
+    if update.message.text:
+        message_type = 'text'
+    elif update.message.sticker:
+        message_type = 'sticker'
+    elif update.message.photo:
+        message_type = 'photo'
+    else:
+        message_type = 'unknown'
 
-    user = update.message.from_user
-    username = user.username if user.username else "No username"
+    # Do something with the message type, for example, print it
+    print(f"Received a {message_type} message")
 
-    message_type = update.message.content_type  # Get the type of message (text, photo, sticker, etc.)
+    # You can also send a response
+    await update.message.reply_text(f"Message type: {message_type}")
 
-    # Create a detailed reply message with all the data
-    reply_message = f"Message Details:\n"
-    reply_message += f"User: @{username}\n"
-    reply_message += f"Message Type: {message_type}\n"
-
-    # Include the full Update data as a dictionary
-    reply_message += f"Full Update Data: {update.to_dict()}"  # Full data in dictionary format
-
-    # Reply with all the details
-    await update.message.reply_text(reply_message)
-
-def main():
-    """Start the bot and handle commands."""
-    # Create the Application using the bot's token
-    application = Application.builder().token(TOKEN).build()
-
-    # Add a command handler to respond to '/start' command
-    application.add_handler(CommandHandler("start", start))
-
-    # Add a message handler to respond to any message
-    application.add_handler(MessageHandler(None, handle_any_message))  # Handles all types of messages
-
-    # Start polling and keep the bot running
-    application.run_polling()
-
-if __name__ == '__main__':
-    main()
+# Add this handler to your bot (if not already done)
+application.add_handler(MessageHandler(filters.TEXT | filters.STICKER | filters.PHOTO, handle_any_message))
