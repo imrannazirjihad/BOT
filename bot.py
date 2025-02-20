@@ -14,12 +14,10 @@ async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
     user = update.message.from_user
     username = user.username if user.username else "No username"
 
-    message_type = update.ALL_TYPES  # Get the type of message (text, photo, sticker, etc.)
-
     # Create a detailed reply message with all the data
-    reply_message = f"Message Details:\n"
-    reply_message += f"User: @{username}\n"
-    reply_message += f"Message Type: {message_type}\n"
+    reply_message = f"Message Details:\n\n"
+    reply_message += f"User: @{username}\n\n"
+    #reply_message += f"Message Type: {message_type}\n"
 
     # Include the full Update data as a dictionary
     reply_message += f"Full Update Data: {update.to_dict()}"  # Full data in dictionary format
