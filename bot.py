@@ -13,12 +13,14 @@ if not TOKEN:
 async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.message.from_user
     username = user.username if user.username else "No username"
-    datatype = bool(update.message.sticker)
+    is_sticker = bool(update.message.sticker)
+    data= update.message.sticker.custom_emoji_id
 
     # Create a detailed reply message with all the data
     reply_message = f"Message Details:\n\n"
     reply_message += f"User: @{username}\n\n"
-    reply_message += f"Data: {datatype}\n\n"
+    reply_message += f"isSticker: {is_sticker}\n\n"
+    reply_message += f"Data: {data}\n\n"
 
     # Reply with all the details
     await update.message.reply_text(reply_message)
