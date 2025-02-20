@@ -11,19 +11,17 @@ if not TOKEN:
 
 
 async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    user = update.message.from_user
-    username = user.username if user.username else "No username"
-    is_sticker = bool(update.message.sticker)
-    data= update.message.sticker.set_name
-
-    # Create a detailed reply message with all the data
-    reply_message = f"Message Details:\n\n"
-    reply_message += f"User: @{username}\n\n"
-    reply_message += f"isSticker: {is_sticker}\n\n"
-    reply_message += f"Data: @{data}\n\n"
-
-    # Reply with all the details
-    await update.message.reply_text(reply_message)
+    is_sticker = bool(update.message.sticker.is_video)
+    if is_sticker:
+        is_video = bool(update.message.sticker)
+        is_animated = bool(update.message.sticker.is_animated)
+        set_name = update.message.sticker.set_name
+        reply_message = f"Message Details:\n\n"
+        reply_message += f"isVideo: {is_video}\n\n"
+        reply_message += f"isSticker: {is_sticker}\n\n"
+        reply_message += f"isAnimated: {is_animated}\n\n"
+        reply_message += f"Name: {set_name}\n\n"
+        await update.message.reply_text(reply_message)
 
 
 def main_methode():
