@@ -26,7 +26,7 @@ async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
     # Reply with all the details
     await update.message.reply_text(reply_message)
 
-def main():
+def main_methode():
     """Start the bot and handle commands."""
     # Create the Application using the bot's token
     application = Application.builder().token(TOKEN).build()
@@ -48,8 +48,5 @@ async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         "Hello! I'm your bot. Send any message and I'll reply with the details."
     )
 
-
-
-
 if __name__ == '__main__':
-    main()
+    main_methode()
