@@ -13,7 +13,7 @@ async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     user = update.message.from_user
     username = user.username if user.username else "No username"
-    datatype = update.message
+    datatype = update.message.chat.type
 
     # Create a detailed reply message with all the data
     reply_message = f"Message Details:\n\n"
