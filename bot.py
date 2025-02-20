@@ -33,7 +33,7 @@ async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
 async def get_gas_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Fetch the gas price from Etherscan and send it to the user."""
-    url = "https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={ETHERSCAN_API_KEY}"
+    url = f"https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={ETHERSCAN_API_KEY}"
     response = requests.get(url)
     data = response.json()
 
