@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext
 
 # Replace with your actual bot token
-TOKEN = "YOUR_TELEGRAM_BOT_API_TOKEN"
+TOKEN = "7306080010:AAGmtNN2Im3HARP1etHEiKJAxN00KQieh0s"
 
 def start(update: Update, context: CallbackContext):
     """Send a welcome message when the bot is started."""
