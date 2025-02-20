@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: deploy-telegram-bot
+  cancel-in-progress: true  # This will cancel any in-progress runs when a new push happens
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
