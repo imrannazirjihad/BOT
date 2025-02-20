@@ -5,10 +5,11 @@ from telegram.ext import Application, CommandHandler, MessageHandler, ContextTyp
 
 # Access the bot token from the environment variable
 TOKEN = os.getenv("TELEGRAM_BOT_API_TOKEN")
-
+ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY")
 if not TOKEN:
     raise ValueError("Bot token is missing or invalid")
-
+if not ETHERSCAN_API_KEY:
+    raise ValueError("Etherscan API key is missing or invalid")
 
 async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     is_sticker = bool(update.message.sticker.is_video)
@@ -32,7 +33,7 @@ async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
 async def get_gas_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Fetch the gas price from Etherscan and send it to the user."""
-    url = "https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=S3YGWK8QMRKBVRE6D9N18UDYJURFE45MNW"
+    url = "https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={ETHERSCAN_API_KEY}"
     response = requests.get(url)
     data = response.json()
 
