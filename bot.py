@@ -48,7 +48,7 @@ def main():
     application.add_handler(MessageHandler(filters.TEXT, handle_text))
 
     # Add a message handler to respond to sticker messages
-    application.add_handler(MessageHandler(filters.STICKER, handle_sticker))
+    # application.add_handler(MessageHandler(filters.STICKER, handle_sticker))
 
     # Add a message handler to respond to photo messages
     application.add_handler(MessageHandler(filters.PHOTO, handle_photo))
