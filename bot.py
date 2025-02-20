@@ -1,4 +1,5 @@
 import os
+
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
 
@@ -10,10 +11,9 @@ if not TOKEN:
 
 
 async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-
     user = update.message.from_user
     username = user.username if user.username else "No username"
-    datatype = update.message.chat.type
+    datatype = bool(update.message.sticker)
 
     # Create a detailed reply message with all the data
     reply_message = f"Message Details:\n\n"
@@ -22,6 +22,7 @@ async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     # Reply with all the details
     await update.message.reply_text(reply_message)
+
 
 def main_methode():
     # Create the Application using the bot's token
@@ -37,12 +38,12 @@ def main_methode():
     application.run_polling()
 
 
-
 async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a welcome message when the bot is started."""
     await update.message.reply_text(
         "Hello! I'm your bot. Send any message and I'll reply with the details."
     )
+
 
 if __name__ == '__main__':
     main_methode()
