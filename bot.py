@@ -1,5 +1,6 @@
 import os
 
+import requests
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
 
@@ -23,6 +24,41 @@ async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
         reply_message += f"Name: {set_name}\n\n"
         await update.message.reply_text(reply_message)
 
+async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    is_sticker = bool(update.message.sticker.is_video)
+    if is_sticker:
+        is_video = bool(update.message.sticker)
+        is_animated = bool(update.message.sticker.is_animated)
+        set_name = update.message.sticker.set_name
+        reply_message = f"Message Details:\n\n"
+        reply_message += f"isVideo: {is_video}\n\n"
+        reply_message += f"isSticker: {is_sticker}\n\n"
+        reply_message += f"isAnimated: {is_animated}\n\n"
+        reply_message += f"Name: {set_name}\n\n"
+        await update.message.reply_text(reply_message)
+
+
+async def get_gas_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Fetch the gas price from Etherscan and send it to the user."""
+    url = "https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=S3YGWK8QMRKBVRE6D9N18UDYJURFE45MNW"
+    response = requests.get(url)
+    data = response.json()
+
+    if data["status"] == "1":
+        gas_price = data["result"]
+        reply_message = f"Current Gas Prices:\n\n"
+        reply_message += f"Low: {gas_price['SafeGasPrice']} Gwei\n"
+        reply_message += f"Standard: {gas_price['ProposeGasPrice']} Gwei\n"
+        reply_message += f"High: {gas_price['FastGasPrice']} Gwei\n"
+        await update.message.reply_text(reply_message)
+    else:
+        await update.message.reply_text("Failed to fetch gas data. Please try again later.")
+
+async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Send a welcome message when the bot is started."""
+    await update.message.reply_text(
+        "Hello! I'm your bot. Send any message and I'll reply with the details."
+    )
 
 def main_methode():
     # Create the Application using the bot's token
@@ -31,19 +67,13 @@ def main_methode():
     # Response For '/start' command
     application.add_handler(CommandHandler("start", start_methode))
 
+    application.add_handler(CommandHandler("gas", get_gas_data))
+
     # Add a message handler to respond to any message
     application.add_handler(MessageHandler(None, handle_any_message))
 
     # Start polling and keep the bot running
     application.run_polling()
-
-
-async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a welcome message when the bot is started."""
-    await update.message.reply_text(
-        "Hello! I'm your bot. Send any message and I'll reply with the details."
-    )
-
 
 if __name__ == '__main__':
     main_methode()
