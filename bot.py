@@ -1,6 +1,6 @@
 import os
 import requests
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
 # Access the bot token from the environment variable
 TOKEN = os.getenv("TELEGRAM_BOT_API_TOKEN")
@@ -25,9 +25,18 @@ async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
         await update.message.reply_text(reply_message)
 
 async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a welcome message when the bot is started."""
+    """Send a welcome message when the bot is started with two buttons."""
+
+    keyboard = [
+        [InlineKeyboardButton("Check Gas Price", callback_data="check_gas")],
+        [InlineKeyboardButton("Visit Etherscan", url="https://etherscan.io")]
+    ]
+
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
     await update.message.reply_text(
-        "Hello! I'm your bot. Send any message and I'll reply with the details."
+        "Hello! I'm your bot. Send any message and I'll reply with the details.",
+        reply_markup=reply_markup
     )
 
 async def get_gas_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
