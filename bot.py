@@ -5,6 +5,9 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 # Access the bot token from the environment variable
 TOKEN = os.getenv("TELEGRAM_BOT_API_TOKEN")
 
+if not TOKEN:
+    raise ValueError("Bot token is missing or invalid")
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a welcome message when the bot is started."""
     await update.message.reply_text("Hello! I'm your bot.")
@@ -14,7 +17,6 @@ async def handle_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     sticker = update.message.sticker
     user = update.message.from_user
     username = user.username if user.username else "No username"
-    # Send the sticker owner username to the chat
     await update.message.reply_text(f"Sticker sent by @{username}")
 
 def main():
