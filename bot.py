@@ -1,5 +1,5 @@
 import os
-
+import requests
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
 
@@ -36,8 +36,15 @@ async def get_gas_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     response = requests.get(url)
     data = response.json()
 
-
-    await update.message.reply_text(data)
+    if data["status"] == "1":
+        gas_price = data["result"]
+        reply_message = f"Current Gas Prices:\n\n"
+        reply_message += f"Low: {gas_price['SafeGasPrice']} Gwei\n"
+        reply_message += f"Standard: {gas_price['ProposeGasPrice']} Gwei\n"
+        reply_message += f"High: {gas_price['FastGasPrice']} Gwei\n"
+        await update.message.reply_text(reply_message)
+    else:
+        await update.message.reply_text("Failed to fetch gas data. Please try again later.")
 
 
 
