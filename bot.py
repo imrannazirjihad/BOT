@@ -1,9 +1,7 @@
 import os
-
 import requests
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
-
 # Access the bot token from the environment variable
 TOKEN = os.getenv("TELEGRAM_BOT_API_TOKEN")
 ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY")
@@ -12,7 +10,6 @@ if not TOKEN:
     raise ValueError("Bot token is missing or invalid")
 if not ETHERSCAN_API_KEY:
     raise ValueError("Etherscan API key is missing or invalid")
-
 
 async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     is_sticker = bool(update.message.sticker)
@@ -27,19 +24,20 @@ async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
         reply_message += f"Name: {set_name}\n\n"
         await update.message.reply_text(reply_message)
 
-
 async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Send a welcome message when the bot is started with two buttons."""
+
     keyboard = [
-        [InlineKeyboardButton("Check Gas Price", callback_data=get_gas_data(update, context))],
+        [InlineKeyboardButton("Check Gas Price", callback_data="check_gas")],
         [InlineKeyboardButton("Visit Etherscan", url="https://etherscan.io")]
     ]
+
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     await update.message.reply_text(
         "Hello! I'm your bot. Send any message and I'll reply with the details.",
         reply_markup=reply_markup
     )
-
 
 async def get_gas_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Fetch the gas price from Etherscan and send it to the user."""
@@ -58,7 +56,7 @@ async def get_gas_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         await update.message.reply_text("Failed to fetch gas data. Please try again later.")
 
 
-# Main Code HERE
+#Main Code HERE
 def main_methode():
     # Create the Application using the bot's token
     application = Application.builder().token(TOKEN).build()
@@ -75,6 +73,6 @@ def main_methode():
     # Start polling and keep the bot running
     application.run_polling()
 
-
 if __name__ == '__main__':
     main_methode()
+
