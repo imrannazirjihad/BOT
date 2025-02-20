@@ -1,8 +1,9 @@
+import os
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-# Replace with your actual bot token
-TOKEN = "7306080010:AAGmtNN2Im3HARP1etHEiKJAxN00KQieh0s"
+# Access the bot token from the environment variable
+TOKEN = os.getenv("TELEGRAM_BOT_API_TOKEN")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a welcome message when the bot is started."""
