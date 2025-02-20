@@ -12,9 +12,9 @@ if not ETHERSCAN_API_KEY:
     raise ValueError("Etherscan API key is missing or invalid")
 
 async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    is_sticker = bool(update.message.sticker.is_video)
+    is_sticker = bool(update.message.sticker)
     if is_sticker:
-        is_video = bool(update.message.sticker)
+        is_video = bool(update.message.sticker.is_video)
         is_animated = bool(update.message.sticker.is_animated)
         set_name = update.message.sticker.set_name
         reply_message = f"Message Details:\n\n"
