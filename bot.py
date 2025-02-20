@@ -47,8 +47,8 @@ def main():
 
     # Add handlers for the bot
     application.add_handler(CommandHandler("start", start))
+    # Handle any message: text, stickers, or photos
     application.add_handler(MessageHandler(filters.TEXT | filters.STICKER | filters.PHOTO, handle_any_message))
-    application.add_handler(MessageHandler(filters.Sticker, handle_sticker))
 
     # Start polling and keep the bot running
     application.run_polling()
