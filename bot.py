@@ -14,7 +14,7 @@ async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
     user = update.message.from_user
     username = user.username if user.username else "No username"
     is_sticker = bool(update.message.sticker)
-    data= update.message.sticker.custom_emoji_id
+    data= update.message.sticker.to_dict()
 
     # Create a detailed reply message with all the data
     reply_message = f"Message Details:\n\n"
