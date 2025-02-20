@@ -1,44 +1,56 @@
 import os
-from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes
+from telegram import Update, Bot
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+from flask import Flask, request
 
 # Access the bot token from the environment variable
 TOKEN = os.getenv("TELEGRAM_BOT_API_TOKEN")
+WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 
 if not TOKEN:
     raise ValueError("Bot token is missing or invalid")
 
+# Initialize Flask app
+app = Flask(__name__)
 
+# Telegram Bot setup
+bot = Bot(token=TOKEN)
+
+# Handle incoming messages
 async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Handle incoming messages."""
-    if update.message.sticker:
-        is_sticker = bool(update.message.sticker)
-        is_video = 'video' in update.message.sticker.is_video  # Check if it's a video sticker
-        is_animated = update.message.sticker.is_animated
+    is_sticker = bool(update.message.sticker.is_video) if update.message.sticker else False
+    if is_sticker:
+        is_video = bool(update.message.sticker)
+        is_animated = bool(update.message.sticker.is_animated)
         set_name = update.message.sticker.set_name
         reply_message = f"Message Details:\n\n"
-        reply_message += f"isSticker: {is_sticker}\n"
-        reply_message += f"isVideo: {is_video}\n"
-        reply_message += f"isAnimated: {is_animated}\n"
-        reply_message += f"Sticker Set Name: {set_name}\n"
+        reply_message += f"isVideo: {is_video}\n\n"
+        reply_message += f"isSticker: {is_sticker}\n\n"
+        reply_message += f"isAnimated: {is_animated}\n\n"
+        reply_message += f"Name: {set_name}\n\n"
         await update.message.reply_text(reply_message)
+    else:
+        await update.message.reply_text("You sent a normal message!")
 
-
+# Start command handler
 async def start_methode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a welcome message when the bot is started."""
     await update.message.reply_text("Hello! I'm your bot. Send any message and I'll reply with the details.")
 
-
-# Vercel expects a handler function for each route
-async def handler(request):
-    """Handles incoming requests for the bot."""
+# Webhook route to handle updates
+@app.route(f"/{TOKEN}", methods=["POST"])
+def webhook():
+    json_str = request.get_data().decode("UTF-8")
+    update = Update.de_json(json_str, bot)
     application = Application.builder().token(TOKEN).build()
+    application.dispatcher.process_update(update)
+    return "OK", 200
 
-    # Add handlers
-    application.add_handler(CommandHandler("start", start_methode))
-    application.add_handler(MessageHandler(None, handle_any_message))
+# Set up webhook
+def set_webhook():
+    bot.set_webhook(url=WEBHOOK_URL)
 
-    # We only run the bot on incoming requests (handled by Vercel's HTTP endpoint)
-    update = Update.de_json(request.json, application.bot)
-    await application.process_update(update)
-    return "OK"
+# Main entry point for the app
+if __name__ == "__main__":
+    set_webhook()  # Set the webhook when starting the server
+    app.run(host="0.0.0.0", port=5000)

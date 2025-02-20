@@ -6,10 +6,8 @@
       "use": "@vercel/python"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/bot.py"
-    }
-  ]
+  "env": {
+    "TELEGRAM_BOT_API_TOKEN": "@telegram-bot-api-token",
+    "WEBHOOK_URL": "https://your-vercel-app.vercel.app/7306080010:AAGmtNN2Im3HARP1etHEiKJAxN00KQieh0s"
+  }
 }
