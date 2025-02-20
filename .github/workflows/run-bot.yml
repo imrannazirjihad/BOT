@@ -32,4 +32,3 @@ jobs:
           python bot.py
         env:
           TELEGRAM_BOT_API_TOKEN: ${{ secrets.TELEGRAM_BOT_API_TOKEN }}
-          WEBHOOK_URL: https://your-vercel-app.vercel.app/${{ secrets.TELEGRAM_BOT_API_TOKEN }}
