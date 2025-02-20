@@ -13,12 +13,12 @@ async def handle_any_message(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     user = update.message.from_user
     username = user.username if user.username else "No username"
+    datatype = update.message.sticker.type
 
     # Create a detailed reply message with all the data
     reply_message = f"Message Details:\n\n"
     reply_message += f"User: @{username}\n\n"
-    # Include the full Update data as a dictionary
-    reply_message += f"Full Update Data: {update.to_json()}"  # Full data in dictionary format
+    reply_message += f"Data: {datatype}\n\n"
 
     # Reply with all the details
     await update.message.reply_text(reply_message)
