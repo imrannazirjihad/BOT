@@ -16,7 +16,14 @@ console.log("Bot is running...");
 
 bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
-  const userMessage = msg.text.trim;
+
+  // Fix the bug: call trim() method properly
+  const userMessage = msg.text ? msg.text.trim() : ''; // Handle undefined msg.text
+
+  if (!userMessage) {
+    bot.sendMessage(chatId, "Please send a valid message.");
+    return;
+  }
 
   if (userMessage.toLowerCase() === "hi") {
     bot.sendMessage(chatId, "Hello !😍");
