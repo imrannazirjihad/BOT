@@ -1,2 +1,0 @@
-# BOT
-LIKE ME 😁
