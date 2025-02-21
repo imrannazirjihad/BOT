@@ -16,7 +16,7 @@ console.log("Bot is running...");
 
 bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
-  const userMessage = msg.text;
+  const userMessage = msg.text.trim;
 
   if (userMessage.toLowerCase() === "hi") {
     bot.sendMessage(chatId, "Hello !😍");
