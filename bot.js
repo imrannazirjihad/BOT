@@ -16,15 +16,15 @@ console.log("Bot is running...");
 
 bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
-  const userMessage = msg.text.trim();
+  const userMessage = msg.text;
 
   if (userMessage.toLowerCase() === "hi") {
-    bot.sendMessage(chatId, "Send me a URL to visit.");
+    bot.sendMessage(chatId, "Hello !😍");
   } else if (userMessage.startsWith("http://") || userMessage.startsWith("https://")) {
     const apiResponse = await visitUrlAndRespond(userMessage);
     bot.sendMessage(chatId, `Response:\n${apiResponse}`);
   } else {
-    bot.sendMessage(chatId, "Please send a valid URL.");
+    bot.sendMessage(chatId, "You can Chat With ME ✔");
   }
 });
 
